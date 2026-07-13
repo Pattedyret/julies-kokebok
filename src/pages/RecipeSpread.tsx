@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { PageChrome, type PageSide } from '../book/PageChrome';
+import { CoffeeRing } from '../components/Doodles';
 import { HeartBurst } from '../components/HeartBurst';
 import { PortionStepper } from '../components/PortionStepper';
 import { formatAmount, scaleAmount } from '../lib/scaling';
@@ -88,6 +89,8 @@ export function RecipeSpread({ side, recipe }: { side: PageSide; recipe: Recipe 
 
   const rightInner = (
     <div className="recipe-page">
+      {/* et kaffemerke her og der — deterministisk, ikke på alle sider */}
+      {recipe.id.length % 2 === 0 && <CoffeeRing className="coffee-ring" />}
       <h3 className="steps-heading">Slik gjør du</h3>
       <ol className="steps">
         {recipe.steps.map((s, i) => (
