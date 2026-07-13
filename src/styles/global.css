@@ -1,0 +1,23 @@
+:root {
+  --paper: #f9f4e8;
+  --paper-shadow: #e8dfc9;
+  --ink: #4a3f35;
+  --ink-soft: #7a6d5f;
+  --accent: #d96c7b; /* rosa — hjerter, markeringer */
+  --accent-soft: #f2c4cc;
+  --line: #d9cdb4; /* ruled lines */
+  --font-hand: 'Caveat', cursive;
+  --font-body: 'Patrick Hand', cursive;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: #e9e0d0; /* bordet boka ligger på */
+  -webkit-font-smoothing: antialiased;
+}
