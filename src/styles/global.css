@@ -4,8 +4,11 @@
   --ink: #4a3f35;
   --ink-soft: #7a6d5f;
   --accent: #d96c7b; /* rosa — hjerter, markeringer */
+  --accent-deep: #b0455a; /* mørkere rosa for liten tekst, holder kontrasten */
   --accent-soft: #f2c4cc;
-  --line: #d9cdb4; /* ruled lines */
+  --line: rgba(217, 205, 180, 0.55); /* ruled lines */
+  --cover: #c96b78;
+  --cover-deep: #a94f5e;
   --font-hand: 'Caveat', cursive;
   --font-body: 'Patrick Hand', cursive;
 }
@@ -14,10 +17,353 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
+  font-size: 17px;
   color: var(--ink);
   background: #e9e0d0; /* bordet boka ligger på */
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  overflow-x: hidden;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: 6px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-hand);
+  font-weight: 600;
+  margin: 0 0 0.4em;
+  line-height: 1.1;
+}
+
+h1 {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+}
+h2 {
+  font-size: clamp(2rem, 4.5vw, 2.9rem);
+}
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+/* ---------- bokscenen ---------- */
+
+.book-scene {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 44px 28px 28px;
+}
+
+.book-wrap {
+  position: relative;
+  width: min(1060px, 94vw);
+  height: min(680px, 88dvh);
+}
+
+.book {
+  position: absolute;
+  inset: 0;
+  perspective: 2600px;
+}
+
+/* mykt fall-skygge under hele boka */
+.book::after {
+  content: '';
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: -16px;
+  height: 26px;
+  background: radial-gradient(ellipse at center, rgba(74, 63, 53, 0.28), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-half {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 1;
+}
+.page-half.left {
+  left: 0;
+}
+.page-half.right {
+  right: 0;
+}
+
+.page-single {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.page-half > *,
+.page-single > *,
+.leaf-face > * {
+  height: 100%;
+}
+
+/* ---------- bladet som vender seg ---------- */
+
+.leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 50%;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  z-index: 6;
+}
+
+.leaf.single {
+  left: 0;
+  width: 100%;
+}
+
+.leaf-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.leaf-face.back {
+  transform: rotateY(180deg);
+}
+
+/* svak skygge langs bladkanten så vendingen får dybde */
+.leaf-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(74, 63, 53, 0.12), transparent 22%);
+  pointer-events: none;
+}
+
+/* ---------- papiret ---------- */
+
+.page-chrome {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--paper);
+  color: var(--ink);
+  padding: clamp(20px, 4vw, 44px);
+}
+
+.page-chrome.lined {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 27px,
+    var(--line) 27px,
+    var(--line) 28px
+  );
+  background-attachment: local;
+}
+
+.side-left {
+  border-radius: 12px 2px 2px 12px;
+  box-shadow: inset -22px 0 26px -20px rgba(74, 63, 53, 0.4);
+}
+
+.side-right {
+  border-radius: 2px 12px 12px 2px;
+  box-shadow: inset 22px 0 26px -20px rgba(74, 63, 53, 0.4);
+}
+
+.side-single {
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(74, 63, 53, 0.16);
+}
+
+.cover-chrome {
+  background-color: var(--cover);
+  color: var(--paper);
+}
+
+/* ---------- hjørner for å bla ---------- */
+
+.corner {
+  position: absolute;
+  bottom: 0;
+  width: 60px;
+  height: 60px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 7;
+  padding: 0;
+  user-select: none;
+}
+
+.corner.next {
+  right: 0;
+  border-radius: 0 0 12px 0;
+}
+.corner.prev {
+  left: 0;
+  border-radius: 0 0 0 12px;
+}
+
+.corner::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.corner.next::after {
+  right: 0;
+  border-bottom: 26px solid var(--paper-shadow);
+  border-left: 26px solid transparent;
+  filter: drop-shadow(-2px -2px 2px rgba(74, 63, 53, 0.25));
+}
+
+.corner.prev::after {
+  left: 0;
+  border-bottom: 26px solid var(--paper-shadow);
+  border-right: 26px solid transparent;
+  filter: drop-shadow(2px -2px 2px rgba(74, 63, 53, 0.25));
+}
+
+@media (hover: hover) {
+  .corner:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ---------- register-faner ---------- */
+
+.tabs {
+  position: absolute;
+  z-index: 8;
+  display: flex;
+}
+
+.tab {
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--paper-shadow);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-innhold {
+  background-color: var(--accent-soft);
+}
+.tab-handleliste {
+  background-color: var(--accent-soft);
+}
+
+/* desktop: faner stikker ut på høyre bokkant */
+@media (min-width: 900px) {
+  .tabs {
+    position: absolute;
+    left: 100%;
+    margin-left: -1px;
+    top: 5%;
+    flex-direction: column;
+    gap: 7px;
+    z-index: 0; /* bak papiret, som ekte registerfaner */
+  }
+  .tab {
+    writing-mode: vertical-rl;
+    padding: 9px 5px;
+    border-radius: 0 9px 9px 0;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    box-shadow: 2px 2px 4px rgba(74, 63, 53, 0.22);
+    transition: transform 160ms ease;
+  }
+  .tab .tab-emoji {
+    display: none;
+  }
+  .tab:hover {
+    transform: translateX(3px);
+  }
+  .tab.active {
+    transform: translateX(6px);
+    box-shadow: 3px 2px 6px rgba(74, 63, 53, 0.3);
+  }
+}
+
+/* mobil: faner ligger som en linjal nederst */
+@media (max-width: 899px) {
+  .book-scene {
+    padding: 10px 8px 84px;
+    align-items: stretch;
+  }
+  .book-wrap {
+    width: 100%;
+    height: calc(100dvh - 104px);
+  }
+  .tabs {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    background: var(--paper);
+    border-top: 2px solid var(--paper-shadow);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+  }
+  .tab {
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 8px;
+    border-radius: 10px;
+    flex: 1;
+    justify-content: center;
+    max-width: 84px;
+  }
+  .tab .tab-emoji {
+    font-size: 20px;
+    line-height: 1;
+  }
+  .tab .tab-label {
+    font-size: 10.5px;
+    line-height: 1.1;
+    text-align: center;
+  }
+  .tab.active {
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
 }
