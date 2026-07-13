@@ -265,6 +265,176 @@ h3 {
   }
 }
 
+/* ---------- oppskriftssider ---------- */
+
+.recipe-page {
+  max-width: 430px;
+}
+
+.recipe-title {
+  color: var(--ink);
+}
+
+.julie-mark {
+  display: block;
+  margin-top: -4px;
+  margin-bottom: 6px;
+  font-family: var(--font-hand);
+  font-size: 1.25rem;
+  color: var(--accent-deep);
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 6px;
+}
+
+.stepper-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px dashed var(--accent);
+  background: transparent;
+  color: var(--accent-deep);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 130ms ease, transform 130ms ease;
+}
+
+.stepper-btn:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.stepper-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .stepper-btn:hover:not(:disabled) {
+    background-color: var(--accent-soft);
+  }
+}
+
+.stepper-value {
+  display: inline-block;
+  font-family: var(--font-hand);
+  font-size: 1.5rem;
+  min-width: 132px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.ing-heading,
+.steps-heading {
+  margin-top: 18px;
+  color: var(--accent-deep);
+}
+
+.ing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ing-list li {
+  line-height: 28px; /* følger papirlinjene */
+}
+
+.ing-amount {
+  font-variant-numeric: tabular-nums;
+  border-radius: 4px;
+  padding: 0 3px;
+  margin-left: -3px;
+}
+
+.etter-smak {
+  color: var(--ink-soft);
+}
+
+.steps {
+  padding-left: 1.5em;
+  margin: 0;
+}
+
+.steps li {
+  margin-bottom: 12px;
+  line-height: 1.55;
+}
+
+.steps li::marker {
+  color: var(--accent-deep);
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+}
+
+.add-wrap {
+  position: relative;
+  display: inline-block;
+  margin-top: 22px;
+}
+
+.washi-btn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 3px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.16)),
+    repeating-linear-gradient(45deg, var(--accent-soft) 0 12px, #eeb7c1 12px 24px);
+  color: var(--ink);
+  transform: rotate(-1.6deg);
+  box-shadow: 1px 2px 5px rgba(74, 63, 53, 0.28);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.washi-btn:active {
+  transform: rotate(-1.6deg) scale(0.96);
+}
+
+@media (hover: hover) {
+  .washi-btn:hover {
+    box-shadow: 2px 3px 7px rgba(74, 63, 53, 0.34);
+  }
+}
+
+.heart-burst {
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  pointer-events: none;
+}
+
+.heart-burst .heart {
+  position: absolute;
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+.sticky-note {
+  display: inline-block;
+  margin-top: 26px;
+  padding: 14px 18px 16px;
+  background: #fbf0b6;
+  transform: rotate(1.8deg);
+  box-shadow: 2px 3px 8px rgba(74, 63, 53, 0.22);
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  line-height: 1.15;
+}
+
+.page-divider {
+  border: none;
+  border-top: 2px dashed var(--paper-shadow);
+  margin: 26px 0;
+}
+
 /* ---------- register-faner ---------- */
 
 .tabs {

@@ -133,23 +133,20 @@ export function Book() {
   const shown = spreads[displayed];
 
   // Statisk innhold under bladet som vender seg (se kommentar over leaf-rendering).
-  let leftUnder: ReactNode;
-  let rightUnder: ReactNode;
-  let singleUnder: ReactNode;
+  // Keyes på rute slik at sideinnhold remountes når oppslaget bytter —
+  // ellers gjenbruker React komponent-instansen og intern state (f.eks.
+  // porsjonsvelgeren) lekker fra forrige oppskrift.
+  let leftSpread: Spread;
+  let rightSpread: Spread;
+  let singleSpread: Spread;
   if (flip && from && to) {
-    if (flip.dir === 1) {
-      leftUnder = renderSide(from, 'left');
-      rightUnder = renderSide(to, 'right');
-      singleUnder = renderSide(to, 'single');
-    } else {
-      leftUnder = renderSide(to, 'left');
-      rightUnder = renderSide(from, 'right');
-      singleUnder = renderSide(from, 'single');
-    }
+    leftSpread = flip.dir === 1 ? from : to;
+    rightSpread = flip.dir === 1 ? to : from;
+    singleSpread = flip.dir === 1 ? to : from;
   } else {
-    leftUnder = renderSide(shown, 'left');
-    rightUnder = renderSide(shown, 'right');
-    singleUnder = renderSide(shown, 'single');
+    leftSpread = shown;
+    rightSpread = shown;
+    singleSpread = shown;
   }
 
   return (
@@ -158,11 +155,17 @@ export function Book() {
         <div className="book" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         {isSpread ? (
           <>
-            <div className="page-half left">{leftUnder}</div>
-            <div className="page-half right">{rightUnder}</div>
+            <div className="page-half left" key={`l-${leftSpread.route}`}>
+              {renderSide(leftSpread, 'left')}
+            </div>
+            <div className="page-half right" key={`r-${rightSpread.route}`}>
+              {renderSide(rightSpread, 'right')}
+            </div>
           </>
         ) : (
-          <div className="page-single">{singleUnder}</div>
+          <div className="page-single" key={`s-${singleSpread.route}`}>
+            {renderSide(singleSpread, 'single')}
+          </div>
         )}
 
         {flip && from && to && isSpread && (
