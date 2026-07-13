@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { PageChrome, type PageSide } from '../book/PageChrome';
 import { navigateTo } from '../book/spreads';
+import { EDITING_KEY } from './EditorPage';
 import { CoffeeRing } from '../components/Doodles';
 import { HeartBurst } from '../components/HeartBurst';
 import { PortionStepper } from '../components/PortionStepper';
@@ -73,7 +74,7 @@ export function RecipeSpread({ side, recipe }: { side: PageSide; recipe: Recipe 
             className="hl-link"
             onClick={() => {
               try {
-                sessionStorage.setItem('julies-kokebok:editing', recipe.id);
+                sessionStorage.setItem(EDITING_KEY, recipe.id);
               } catch {
                 /* uviktig */
               }

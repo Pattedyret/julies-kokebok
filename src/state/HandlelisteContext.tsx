@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
 import {
   addRecipeToList,
   clearChecked,
@@ -24,17 +24,21 @@ export function HandlelisteProvider({ children }: { children: ReactNode }) {
     () => safeGet(KEYS.handleliste, isListItemArray) ?? [],
   );
 
-  useEffect(() => {
-    safeSet(KEYS.handleliste, items);
-  }, [items]);
+  // Som i RecipesContext: lagring skjer i mutasjonen, aldri på mount.
+  const mutate = (fn: (prev: ListItem[]) => ListItem[]) =>
+    setItems((prev) => {
+      const next = fn(prev);
+      safeSet(KEYS.handleliste, next);
+      return next;
+    });
 
   const api = useMemo<HandlelisteApi>(
     () => ({
       items,
-      addRecipe: (recipe, portions) => setItems((prev) => addRecipeToList(prev, recipe, portions)),
-      toggle: (id) => setItems((prev) => toggleItem(prev, id)),
-      clearAll: () => setItems(clearList()),
-      clearChecked: () => setItems((prev) => clearChecked(prev)),
+      addRecipe: (recipe, portions) => mutate((prev) => addRecipeToList(prev, recipe, portions)),
+      toggle: (id) => mutate((prev) => toggleItem(prev, id)),
+      clearAll: () => mutate(() => clearList()),
+      clearChecked: () => mutate((p) => clearChecked(p)),
     }),
     [items],
   );

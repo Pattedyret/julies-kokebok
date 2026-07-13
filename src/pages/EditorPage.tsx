@@ -10,12 +10,24 @@ import { useRecipes } from '../state/RecipesContext';
 
 export const EDITING_KEY = 'julies-kokebok:editing';
 
-type IngRow = { amount: string; unit: string; name: string; etterSmak: boolean };
+// Stabile nøkler per rad — indeks-nøkler gjør at fokus hopper til feil felt
+// når en midtre rad slettes.
+type IngRow = { key: string; amount: string; unit: string; name: string; etterSmak: boolean };
+type StepRow = { key: string; text: string };
 
-const emptyRow = (): IngRow => ({ amount: '', unit: '', name: '', etterSmak: false });
+const emptyRow = (): IngRow => ({
+  key: crypto.randomUUID(),
+  amount: '',
+  unit: '',
+  name: '',
+  etterSmak: false,
+});
+
+const emptyStep = (text = ''): StepRow => ({ key: crypto.randomUUID(), text });
 
 function rowsFromRecipe(r: Recipe): IngRow[] {
   return r.ingredients.map((ing) => ({
+    key: crypto.randomUUID(),
     amount: ing.amount !== undefined ? String(ing.amount).replace('.', ',') : '',
     unit: ing.unit ?? '',
     name: ing.name,
@@ -43,7 +55,9 @@ export function EditorPage({ side }: { side: PageSide }) {
   const [rows, setRows] = useState<IngRow[]>(() =>
     editing ? rowsFromRecipe(editing) : [emptyRow(), emptyRow(), emptyRow()],
   );
-  const [steps, setSteps] = useState<string[]>(editing?.steps ?? ['']);
+  const [steps, setSteps] = useState<StepRow[]>(() =>
+    editing ? editing.steps.map((s) => emptyStep(s)) : [emptyStep()],
+  );
   const [note, setNote] = useState(editing?.note ?? '');
   const [error, setError] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -84,7 +98,7 @@ export function EditorPage({ side }: { side: PageSide }) {
       setError('Legg til minst én ingrediens 🥕');
       return;
     }
-    const cleanSteps = steps.map((s) => s.trim()).filter(Boolean);
+    const cleanSteps = steps.map((s) => s.text.trim()).filter(Boolean);
     if (cleanSteps.length === 0) {
       setError('Skriv minst ett steg i fremgangsmåten 🍳');
       return;
@@ -154,7 +168,7 @@ export function EditorPage({ side }: { side: PageSide }) {
       <span className="ed-label">Ingredienser</span>
       <div className="ed-rows">
         {rows.map((r, i) => (
-          <div key={i} className="ed-row">
+          <div key={r.key} className="ed-row">
             {!r.etterSmak && (
               <>
                 <input
@@ -214,15 +228,17 @@ export function EditorPage({ side }: { side: PageSide }) {
       <span className="ed-label">Slik gjør du</span>
       <div className="ed-rows">
         {steps.map((s, i) => (
-          <div key={i} className="ed-row ed-step-row">
+          <div key={s.key} className="ed-row ed-step-row">
             <span className="ed-step-num" aria-hidden>
               {i + 1}.
             </span>
             <textarea
               className="ed-input ed-step"
-              value={s}
+              value={s.text}
               onChange={(e) =>
-                setSteps((prev) => prev.map((x, j) => (j === i ? e.target.value : x)))
+                setSteps((prev) =>
+                  prev.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)),
+                )
               }
               rows={2}
               placeholder="Bland alt godt sammen …"
@@ -240,7 +256,7 @@ export function EditorPage({ side }: { side: PageSide }) {
           </div>
         ))}
       </div>
-      <button type="button" className="ed-add" onClick={() => setSteps((p) => [...p, ''])}>
+      <button type="button" className="ed-add" onClick={() => setSteps((p) => [...p, emptyStep()])}>
         + nytt steg
       </button>
 

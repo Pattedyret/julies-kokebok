@@ -4,7 +4,7 @@ import { AboutPage } from '../pages/AboutPage';
 import { CategoryDivider } from '../pages/CategoryDivider';
 import { CoverPage } from '../pages/CoverPage';
 import { DedicationPage } from '../pages/DedicationPage';
-import { EditorPage } from '../pages/EditorPage';
+import { EDITING_KEY, EditorPage } from '../pages/EditorPage';
 import { HandlelistePage } from '../pages/HandlelistePage';
 import { RecipeSpread } from '../pages/RecipeSpread';
 import { TocPage } from '../pages/TocPage';
@@ -87,6 +87,20 @@ export function Book() {
     setFlip(null);
     setDisplayed(routeToIndex(spreads, location.hash));
   }, [spreads]);
+
+  // Rydd bort påbegynt redigering når vi lander utenfor editoren — ellers
+  // kaprer en glemt «rediger» neste «legg til ny oppskrift» og overskriver
+  // feil oppskrift. (Nøkkelen settes rett før navigasjonen dit; `displayed`
+  // endres først når bla-animasjonen lander, så den lovlige flyten overlever.)
+  useEffect(() => {
+    if (spreads[displayed]?.kind !== 'editor') {
+      try {
+        sessionStorage.removeItem(EDITING_KEY);
+      } catch {
+        /* uviktig */
+      }
+    }
+  }, [displayed, spreads]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
