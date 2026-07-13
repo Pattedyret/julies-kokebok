@@ -1,0 +1,22 @@
+{
+  "name": "Julies kokebok",
+  "short_name": "Kokeboka",
+  "description": "Julies egne oppskrifter — med handleliste og porsjonsskalering",
+  "start_url": "/julies-kokebok/",
+  "scope": "/julies-kokebok/",
+  "display": "standalone",
+  "background_color": "#f9f4e8",
+  "theme_color": "#f7f0e3",
+  "icons": [
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
