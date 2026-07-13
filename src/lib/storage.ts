@@ -4,6 +4,7 @@ import type { Ingredient, Recipe } from './types';
 export const KEYS = {
   recipes: 'julies-kokebok:v1:recipes',
   handleliste: 'julies-kokebok:v1:handleliste',
+  ratings: 'julies-kokebok:v1:ratings',
 } as const;
 
 export function safeGet<T>(key: string, validate: (v: unknown) => v is T): T | undefined {
@@ -60,6 +61,17 @@ export function isRecipe(v: unknown): v is Recipe {
 
 export function isRecipeArray(v: unknown): v is Recipe[] {
   return Array.isArray(v) && v.every(isRecipe);
+}
+
+export function isRatingsMap(v: unknown): v is Record<string, number> {
+  return (
+    typeof v === 'object' &&
+    v !== null &&
+    !Array.isArray(v) &&
+    Object.entries(v).every(
+      ([k, n]) => typeof k === 'string' && typeof n === 'number' && n >= 1 && n <= 5,
+    )
+  );
 }
 
 export function isListItemArray(v: unknown): v is ListItem[] {

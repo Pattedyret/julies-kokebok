@@ -1,19 +1,22 @@
 import { useRef, useState } from 'react';
 import { PageChrome, type PageSide } from '../book/PageChrome';
 import { DoodleHeart, DoodleStrawberry, WashiTape } from '../components/Doodles';
-import { isRecipeArray } from '../lib/storage';
+import { buildBackup, parseBackup } from '../lib/backup';
+import { getAllImages, setImage } from '../lib/imageStore';
+import { useRatings } from '../state/RatingsContext';
 import { useRecipes } from '../state/RecipesContext';
 
 export function AboutPage({ side }: { side: PageSide }) {
   const { julieRecipes, importRecipes } = useRecipes();
+  const { ratings, importRatings } = useRatings();
   const fileRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  const exportBackup = () => {
-    const blob = new Blob(
-      [JSON.stringify({ version: 1, recipes: julieRecipes }, null, 2)],
-      { type: 'application/json' },
-    );
+  const exportBackup = async () => {
+    const images = await getAllImages();
+    const blob = new Blob([buildBackup(julieRecipes, ratings, images)], {
+      type: 'application/json',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -24,18 +27,22 @@ export function AboutPage({ side }: { side: PageSide }) {
 
   const importBackup = async (file: File) => {
     try {
-      const data: unknown = JSON.parse(await file.text());
-      const recipes =
-        typeof data === 'object' && data !== null && 'recipes' in data
-          ? (data as { recipes: unknown }).recipes
-          : data;
-      if (!isRecipeArray(recipes) || !recipes.every((r) => r.source === 'julie')) {
+      const parsed = parseBackup(JSON.parse(await file.text()));
+      if (!parsed || !parsed.recipes.every((r) => r.source === 'julie')) {
         setMessage('Kunne ikke lese filen 😢 — er det riktig sikkerhetskopi?');
         return;
       }
-      importRecipes(recipes);
+      importRecipes(parsed.recipes);
+      importRatings(parsed.ratings);
+      let imageCount = 0;
+      for (const [id, dataUrl] of Object.entries(parsed.images)) {
+        if (await setImage(id, dataUrl)) imageCount++;
+      }
+      const r = parsed.recipes.length;
       setMessage(
-        `${recipes.length} ${recipes.length === 1 ? 'oppskrift' : 'oppskrifter'} importert ♥`,
+        `${r} ${r === 1 ? 'oppskrift' : 'oppskrifter'}${
+          imageCount > 0 ? ` og ${imageCount} ${imageCount === 1 ? 'bilde' : 'bilder'}` : ''
+        } importert ♥`,
       );
     } catch {
       setMessage('Kunne ikke lese filen 😢 — er det riktig sikkerhetskopi?');
@@ -44,14 +51,14 @@ export function AboutPage({ side }: { side: PageSide }) {
 
   const about = (
     <div className="about-page">
-      <WashiTape variant="rosa" style={{ top: 12, left: 28, transform: 'rotate(-4deg)' }} />
+      <WashiTape variant="gronn" style={{ top: 12, left: 28, transform: 'rotate(-4deg)' }} />
       <h2>Om boka</h2>
       <p className="about-text">
         Denne boka er laga til Julie ♥ Her bor favorittoppskriftene — de gamle fra notatboka og de
         nye du legger til selv.
       </p>
       <p className="about-text">
-        Skaler porsjonene på hver oppskrift, trykk «Legg til i handleliste», og del lista rett til
+        Skaler porsjonene, sett hjerter på favorittene, lim inn bilder, og del handlelista rett til
         Notater når du skal i butikken.
       </p>
       <DoodleHeart size={34} style={{ color: 'var(--accent)' }} />
@@ -69,12 +76,7 @@ export function AboutPage({ side }: { side: PageSide }) {
             } skrevet av Julie ✎`}
       </p>
       <div className="about-backup-actions">
-        <button
-          type="button"
-          className="washi-btn"
-          onClick={exportBackup}
-          disabled={julieRecipes.length === 0}
-        >
+        <button type="button" className="washi-btn" onClick={() => void exportBackup()}>
           Eksporter sikkerhetskopi
         </button>
         <button type="button" className="hl-link" onClick={() => fileRef.current?.click()}>
@@ -98,8 +100,8 @@ export function AboutPage({ side }: { side: PageSide }) {
         </p>
       )}
       <p className="hl-note">
-        Sikkerhetskopien er en liten fil du kan legge i skyen eller sende til deg selv — sånn blir
-        ingenting borte om telefonen byttes ut.
+        Sikkerhetskopien tar med egne oppskrifter, hjertene og bildene. Legg fila i skyen eller
+        send den til deg selv — sånn blir ingenting borte om telefonen byttes ut.
       </p>
       <DoodleStrawberry className="about-berry" size={44} />
     </div>

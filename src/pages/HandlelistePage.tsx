@@ -87,7 +87,7 @@ export function HandlelistePage({ side }: { side: PageSide }) {
 
   const actions = (
     <div className="hl-actions">
-      <WashiTape variant="rosa" style={{ top: 8, right: 24, transform: 'rotate(5deg)' }} />
+      <WashiTape variant="gronn" style={{ top: 8, right: 24, transform: 'rotate(5deg)' }} />
       <h3>Ta lista med deg</h3>
       <button type="button" className="washi-btn" onClick={share} disabled={items.length === 0}>
         {shareState === 'copied' ? 'Kopiert! Lim inn i Notater 📋' : 'Del listen 💌'}

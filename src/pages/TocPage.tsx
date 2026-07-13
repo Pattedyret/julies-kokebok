@@ -3,10 +3,12 @@ import { PageChrome, type PageSide } from '../book/PageChrome';
 import { buildSpreads, navigateTo } from '../book/spreads';
 import { DoodleSparkles, DoodleWhisk, WashiTape } from '../components/Doodles';
 import { CATEGORIES } from '../data/categories';
+import { useRatings } from '../state/RatingsContext';
 import { useRecipes } from '../state/RecipesContext';
 
 export function TocPage({ side }: { side: PageSide }) {
   const { recipes } = useRecipes();
+  const { ratings } = useRatings();
   const spreads = useMemo(() => buildSpreads(recipes), [recipes]);
 
   if (side === 'right') {
@@ -49,6 +51,14 @@ export function TocPage({ side }: { side: PageSide }) {
                           {s.recipe.title}
                           {s.recipe.source === 'julie' ? ' ✎' : ''}
                         </span>
+                        {(ratings[s.recipe.id] ?? 0) > 0 && (
+                          <span
+                            className="toc-hearts"
+                            aria-label={`${ratings[s.recipe.id]} av 5 hjerter`}
+                          >
+                            {'♥'.repeat(ratings[s.recipe.id])}
+                          </span>
+                        )}
                         <span className="toc-dots" aria-hidden />
                         <span className="toc-page">{i + 1}</span>
                       </button>

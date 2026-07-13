@@ -3,12 +3,12 @@
   --paper-shadow: #e8dfc9;
   --ink: #4a3f35;
   --ink-soft: #7a6d5f;
-  --accent: #d96c7b; /* rosa — hjerter, markeringer */
-  --accent-deep: #b0455a; /* mørkere rosa for liten tekst, holder kontrasten */
-  --accent-soft: #f2c4cc;
+  --accent: #7fb491; /* pastellgrønn — hjerter, markeringer */
+  --accent-deep: #3e7354; /* mørkere grønn for liten tekst, holder kontrasten */
+  --accent-soft: #cfe6d5;
   --line: rgba(217, 205, 180, 0.55); /* ruled lines */
-  --cover: #c96b78;
-  --cover-deep: #a94f5e;
+  --cover: #96bfa2;
+  --cover-deep: #6d9c7d;
   --font-hand: 'Caveat', cursive;
   --font-body: 'Patrick Hand', cursive;
 }
@@ -209,7 +209,7 @@ h3 {
 /* ---------- omslaget ---------- */
 
 .cover-chrome {
-  background: linear-gradient(135deg, #cf7280, #b85a6b);
+  background: linear-gradient(135deg, #a4cbb1, #86b295);
   color: var(--paper);
   overflow: hidden;
 }
@@ -281,7 +281,7 @@ h3 {
   bottom: 0;
   right: 24px;
   width: 12px;
-  background: #8f3c4b;
+  background: #5f8f6f;
   box-shadow: -2px 0 4px rgba(0, 0, 0, 0.22), 2px 0 4px rgba(0, 0, 0, 0.22);
   pointer-events: none;
 }
@@ -299,8 +299,8 @@ h3 {
   z-index: 2;
 }
 
-.washi-rosa {
-  background: repeating-linear-gradient(45deg, var(--accent-soft) 0 10px, #f8dee3 10px 20px);
+.washi-gronn {
+  background: repeating-linear-gradient(45deg, var(--accent-soft) 0 10px, #e3f2e8 10px 20px);
 }
 
 .washi-gul {
@@ -928,6 +928,112 @@ h3 {
   cursor: default;
 }
 
+/* ---------- vurdering (hjerter) ---------- */
+
+.rating {
+  display: flex;
+  gap: 2px;
+  margin: 2px 0 4px;
+}
+
+.rating-heart {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.45rem;
+  line-height: 1;
+  padding: 6px 4px;
+  color: var(--ink-soft);
+  user-select: none;
+  transition: transform 120ms ease, color 120ms ease;
+}
+
+.rating-heart.filled {
+  color: var(--accent-deep);
+}
+
+.rating-heart:active {
+  transform: scale(0.88);
+}
+
+@media (hover: hover) {
+  .rating-heart:hover {
+    transform: scale(1.12);
+  }
+}
+
+.toc-hearts {
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-size: 0.85em;
+  letter-spacing: 1px;
+  margin-left: 2px;
+}
+
+/* ---------- fotografi ---------- */
+
+.photo-wrap {
+  margin-top: 24px;
+}
+
+.polaroid {
+  position: relative;
+  display: inline-block;
+  margin: 10px 0 4px;
+  padding: 10px 10px 16px;
+  background: #fff;
+  transform: rotate(-1.6deg);
+  box-shadow: 2px 4px 10px rgba(74, 63, 53, 0.28);
+  max-width: min(320px, 100%);
+}
+
+.polaroid img {
+  display: block;
+  max-width: 100%;
+  border-radius: 2px;
+}
+
+.polaroid-tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(2deg);
+  width: 84px;
+  height: 24px;
+  background: repeating-linear-gradient(45deg, var(--accent-soft) 0 10px, #e3f2e8 10px 20px);
+  opacity: 0.9;
+  clip-path: polygon(2% 0, 98% 4%, 100% 96%, 1% 100%);
+  box-shadow: 0 1px 3px rgba(74, 63, 53, 0.18);
+}
+
+.photo-actions {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.photo-add {
+  border: 2px dashed var(--accent);
+  background: transparent;
+  color: var(--accent-deep);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.photo-add:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .photo-add:hover:not(:disabled) {
+    background: var(--accent-soft);
+  }
+}
+
 /* ---------- kaffemerke ---------- */
 
 .recipe-page {
@@ -1117,7 +1223,7 @@ h3 {
   border-radius: 3px;
   background:
     linear-gradient(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.16)),
-    repeating-linear-gradient(45deg, var(--accent-soft) 0 12px, #eeb7c1 12px 24px);
+    repeating-linear-gradient(45deg, var(--accent-soft) 0 12px, #b9d9c2 12px 24px);
   color: var(--ink);
   transform: rotate(-1.6deg);
   box-shadow: 1px 2px 5px rgba(74, 63, 53, 0.28);

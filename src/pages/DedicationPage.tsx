@@ -20,7 +20,7 @@ export function DedicationPage({ side }: { side: PageSide }) {
 
   return (
     <PageChrome side={side}>
-      <WashiTape variant="rosa" style={{ top: 14, left: 26, transform: 'rotate(-6deg)' }} />
+      <WashiTape variant="gronn" style={{ top: 14, left: 26, transform: 'rotate(-6deg)' }} />
       <div className="dedication">
         <h2 className="dedication-title">Til Julie ♥</h2>
         <p className="dedication-greeting">{GREETING}</p>

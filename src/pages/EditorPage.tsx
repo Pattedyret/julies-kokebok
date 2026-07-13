@@ -4,8 +4,10 @@ import { navigateTo } from '../book/spreads';
 import { DoodleSparkles, DoodleWhisk, WashiTape } from '../components/Doodles';
 import { PortionStepper } from '../components/PortionStepper';
 import { CATEGORIES } from '../data/categories';
+import { deleteImage } from '../lib/imageStore';
 import { parseAmount } from '../lib/scaling';
 import type { CategoryId, Ingredient, Recipe } from '../lib/types';
+import { useRatings } from '../state/RatingsContext';
 import { useRecipes } from '../state/RecipesContext';
 
 export const EDITING_KEY = 'julies-kokebok:editing';
@@ -37,6 +39,7 @@ function rowsFromRecipe(r: Recipe): IngRow[] {
 
 export function EditorPage({ side }: { side: PageSide }) {
   const { recipes, addRecipe, updateRecipe, removeRecipe } = useRecipes();
+  const { removeRating } = useRatings();
 
   const [editingId] = useState<string | null>(() => {
     try {
@@ -122,6 +125,8 @@ export function EditorPage({ side }: { side: PageSide }) {
   const onDelete = () => {
     if (!editing) return;
     removeRecipe(editing.id);
+    removeRating(editing.id);
+    void deleteImage(editing.id);
     clearEditing();
     navigateTo('innhold');
   };

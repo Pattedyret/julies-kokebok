@@ -1,7 +1,7 @@
 # Julies kokebok 📖♥
 
 En digital notatbok-kokebok laget til Julie — med bla-animasjon, porsjonsskalering,
-handleliste og hennes egne oppskriftssider.
+handleliste, hjertevurderinger, innlimte bilder og hennes egne oppskriftssider.
 
 **Live:** https://pattedyret.github.io/julies-kokebok/
 
@@ -37,8 +37,9 @@ Dedikasjonssiden («Til Julie ♥») redigeres øverst i
 ## Julies egne oppskrifter
 
 Oppskrifter lagt til i appen («Legg til oppskrift») lagres i nettleseren på enheten
-hennes (`localStorage`). De synkroniseres ikke mellom enheter — derfor finnes
-eksport/import av sikkerhetskopi på «Om boka»-siden bakerst i boka.
+hennes (`localStorage`); hjertevurderinger likeså, og innlimte bilder lagres i
+IndexedDB. Ingenting synkroniseres mellom enheter — derfor tar sikkerhetskopien på
+«Om boka»-siden (bakerst i boka) med både oppskrifter, hjerter og bilder.
 
 ## Utvikling
 

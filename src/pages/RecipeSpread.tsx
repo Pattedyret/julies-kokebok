@@ -5,10 +5,13 @@ import { navigateTo } from '../book/spreads';
 import { EDITING_KEY } from './EditorPage';
 import { CoffeeRing } from '../components/Doodles';
 import { HeartBurst } from '../components/HeartBurst';
+import { HeartRating } from '../components/HeartRating';
 import { PortionStepper } from '../components/PortionStepper';
+import { RecipePhoto } from '../components/RecipePhoto';
 import { formatAmount, scaleAmount } from '../lib/scaling';
 import type { Ingredient, Recipe } from '../lib/types';
 import { useHandleliste } from '../state/HandlelisteContext';
+import { useRatings } from '../state/RatingsContext';
 
 function IngredientRow({
   ing,
@@ -44,6 +47,7 @@ function IngredientRow({
 
 export function RecipeSpread({ side, recipe }: { side: PageSide; recipe: Recipe }) {
   const { addRecipe } = useHandleliste();
+  const { ratings, setRating } = useRatings();
   const [portions, setPortions] = useState(recipe.portions);
   const [burst, setBurst] = useState(0);
   const [added, setAdded] = useState(false);
@@ -86,6 +90,7 @@ export function RecipeSpread({ side, recipe }: { side: PageSide; recipe: Recipe 
         </span>
       )}
       <PortionStepper value={portions} onChange={setPortions} />
+      <HeartRating value={ratings[recipe.id] ?? 0} onChange={(n) => setRating(recipe.id, n)} />
       <h3 className="ing-heading">Ingredienser</h3>
       <ul className="ing-list">
         {recipe.ingredients.map((ing, i) => (
@@ -118,6 +123,7 @@ export function RecipeSpread({ side, recipe }: { side: PageSide; recipe: Recipe 
         ))}
       </ol>
       {recipe.note && <p className="sticky-note">{recipe.note}</p>}
+      <RecipePhoto recipeId={recipe.id} title={recipe.title} />
     </div>
   );
 

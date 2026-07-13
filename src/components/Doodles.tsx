@@ -140,11 +140,11 @@ export function CoffeeRing({ className, style, size = 92 }: DoodleProps) {
 export function WashiTape({
   className,
   style,
-  variant = 'rosa',
+  variant = 'gronn',
 }: {
   className?: string;
   style?: CSSProperties;
-  variant?: 'rosa' | 'gul' | 'blaa';
+  variant?: 'gronn' | 'gul' | 'blaa';
 }) {
   return <span className={`washi-tape washi-${variant} ${className ?? ''}`} style={style} aria-hidden />;
 }
