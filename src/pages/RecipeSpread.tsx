@@ -112,10 +112,15 @@ export function RecipeSpread({ side, recipe }: { side: PageSide; recipe: Recipe 
     </div>
   );
 
-  const rightInner = (
+  // Bildet øverst, som i en ekte kokebok: toppen av høyresiden på oppslag,
+  // aller øverst på mobil.
+  const photo = <RecipePhoto recipeId={recipe.id} title={recipe.title} />;
+
+  const stepsInner = (withPhoto: boolean) => (
     <div className="recipe-page">
       {/* et kaffemerke her og der — deterministisk, ikke på alle sider */}
       {recipe.id.length % 2 === 0 && <CoffeeRing className="coffee-ring" />}
+      {withPhoto && photo}
       <h3 className="steps-heading">Slik gjør du</h3>
       <ol className="steps">
         {recipe.steps.map((s, i) => (
@@ -123,17 +128,17 @@ export function RecipeSpread({ side, recipe }: { side: PageSide; recipe: Recipe 
         ))}
       </ol>
       {recipe.note && <p className="sticky-note">{recipe.note}</p>}
-      <RecipePhoto recipeId={recipe.id} title={recipe.title} />
     </div>
   );
 
   if (side === 'left') return <PageChrome side="left">{leftInner}</PageChrome>;
-  if (side === 'right') return <PageChrome side="right">{rightInner}</PageChrome>;
+  if (side === 'right') return <PageChrome side="right">{stepsInner(true)}</PageChrome>;
   return (
     <PageChrome side="single">
+      <div className="recipe-page">{photo}</div>
       {leftInner}
       <hr className="page-divider" />
-      {rightInner}
+      {stepsInner(false)}
     </PageChrome>
   );
 }
