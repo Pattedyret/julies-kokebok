@@ -538,6 +538,168 @@ h3 {
   color: rgba(74, 63, 53, 0.4);
 }
 
+/* ---------- handleliste ---------- */
+
+.hl-group {
+  margin-top: 12px;
+}
+
+.hl-group-title {
+  color: var(--accent-deep);
+  margin-bottom: 2px;
+}
+
+.hl-rows {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 6px 2px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-size: 17px;
+  border-radius: 6px;
+  user-select: none;
+}
+
+.check-dot {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: background-color 150ms ease;
+}
+
+.check-row.checked .check-dot {
+  background-color: var(--accent);
+}
+
+.check-row.checked .check-dot::after {
+  content: '✓';
+  color: var(--paper);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.check-text {
+  position: relative;
+  transition: color 180ms ease;
+}
+
+.check-text::after {
+  content: '';
+  position: absolute;
+  left: -3px;
+  right: calc(100% + 3px); /* bredde 0 når uavkrysset — ellers synes en liten stubb */
+  top: 55%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink-soft);
+  transform: rotate(-1.2deg);
+  transition: right 200ms ease;
+}
+
+.check-row.checked .check-text {
+  color: var(--ink-soft);
+}
+
+.check-row.checked .check-text::after {
+  right: -3px;
+}
+
+.hl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 48px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-family: var(--font-hand);
+  font-size: 1.3rem;
+}
+
+.hl-actions {
+  position: relative;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.hl-manual {
+  width: 100%;
+  min-height: 140px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px dashed var(--paper-shadow);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.hl-small-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: baseline;
+}
+
+.hl-link {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--accent-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 4px 2px;
+}
+
+.hl-link:disabled {
+  color: var(--ink-soft);
+  opacity: 0.5;
+  cursor: default;
+  text-decoration: none;
+}
+
+.hl-link-danger {
+  color: #a03030;
+}
+
+.hl-confirm {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+}
+
+.hl-note {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  max-width: 300px;
+  line-height: 1.4;
+}
+
+.hl-sparkle {
+  position: absolute;
+  bottom: 2%;
+  right: 4%;
+  color: var(--accent);
+  opacity: 0.55;
+}
+
 /* ---------- kaffemerke ---------- */
 
 .recipe-page {
