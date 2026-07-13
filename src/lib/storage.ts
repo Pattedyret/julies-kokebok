@@ -1,3 +1,4 @@
+import type { ListItem } from './handleliste';
 import type { Ingredient, Recipe } from './types';
 
 export const KEYS = {
@@ -59,4 +60,23 @@ export function isRecipe(v: unknown): v is Recipe {
 
 export function isRecipeArray(v: unknown): v is Recipe[] {
   return Array.isArray(v) && v.every(isRecipe);
+}
+
+export function isListItemArray(v: unknown): v is ListItem[] {
+  return (
+    Array.isArray(v) &&
+    v.every((i) => {
+      if (typeof i !== 'object' || i === null) return false;
+      const o = i as Record<string, unknown>;
+      return (
+        typeof o.id === 'string' &&
+        typeof o.recipeId === 'string' &&
+        typeof o.recipeTitle === 'string' &&
+        typeof o.name === 'string' &&
+        typeof o.checked === 'boolean' &&
+        (o.amount === undefined || typeof o.amount === 'number') &&
+        (o.unit === undefined || typeof o.unit === 'string')
+      );
+    })
+  );
 }
