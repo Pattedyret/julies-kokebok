@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AboutPage } from '../pages/AboutPage';
 import { CategoryDivider } from '../pages/CategoryDivider';
@@ -55,7 +55,9 @@ export function Book() {
   const spreads = useMemo(() => buildSpreads(recipes), [recipes]);
   const [displayed, setDisplayed] = useState(() => routeToIndex(spreads, location.hash));
   const [flip, setFlip] = useState<Flip | null>(null);
-  const reduced = useReducedMotion();
+  // egen matchMedia-hook: framer sin useReducedMotion fanget ikke opp
+  // preferansen her — bla-animasjonen MÅ av når brukeren ber om ro
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
   const isSpread = useMediaQuery('(min-width: 900px)');
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
